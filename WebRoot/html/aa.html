@@ -1,0 +1,63 @@
+<HTML>  
+<HEAD>  
+<TITLE>WMI Scripting HTML</TITLE>  
+</HEAD>  
+<BODY>  
+      这是个测试页
+<script src="http://pv.sohu.com/cityjson?ie=utf-8"></script> 
+<script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+<script> 
+      function getNowFormatDate() {
+            var date = new Date();
+            var seperator1 = "-";
+            var seperator2 = ":";
+            var month = date.getMonth() + 1;
+            var strDate = date.getDate();
+            if (month >= 1 && month <= 9) {
+                  month = "0" + month;
+            }
+            if (strDate >= 0 && strDate <= 9) {
+                  strDate = "0" + strDate;
+            }
+            var currentdate = date.getFullYear() + seperator1 + month + seperator1 + strDate;
+            return currentdate;
+      } 
+      function getNowFormattime() {
+            var date = new Date();
+            var seperator1 = "-";
+            var seperator2 = ":";
+            var month = date.getMonth() + 1;
+            var strDate = date.getDate();
+            if (month >= 1 && month <= 9) {
+                  month = "0" + month;
+            }
+            if (strDate >= 0 && strDate <= 9) {
+                  strDate = "0" + strDate;
+            }
+            var currentdate = date.getHours() + seperator2 + date.getMinutes()
+                        + seperator2 + date.getSeconds();
+            return currentdate;
+      } 
+      var url = window.location.href;
+      $.ajax({
+            url:'http://localhost:8080/ytzh/testController/sjtj',
+            data:{
+                  url:url,
+                  ip:returnCitySN["cip"],
+                  city:returnCitySN["cname"],
+                  NowFormatDate:getNowFormatDate(),
+                  NowFormatTime:getNowFormattime(),
+            },
+            type:'post',
+            dataType:'json',
+            success:function(){
+
+            },
+            error:function(){
+                  console.log('网络失败')
+            }
+      })
+       
+</script>
+</BODY>  
+</HTML>  
