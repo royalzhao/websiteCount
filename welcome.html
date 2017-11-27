@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="./lib/lay/modules/">
+    <title>Document</title>
+    <link rel="stylesheet" href="lib/css/layui.css">
+</head>
+<body>
+    <blockquote class="layui-elem-quote">欢迎来到盈泰正和网站统计检测后台</blockquote>
+    <table class="layui-table">
+        <thead>
+            <tr>
+                <th colspan="2" scope="col">服务器信息</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <th width="30%">服务器计算机名</th>
+                <td><span id="lbServerName"><script>document.write(document.location.hostname)</script></span></td>
+            </tr>
+            <tr>
+                <td>服务器IP地址</td>
+                <td><script>document.write(document.location.hostname)</script></td>
+            </tr>
+            <tr>
+                <td>服务器域名</td>
+                <td><script>document.write(document.domain)</script></td>
+            </tr>
+            <tr>
+                <td>服务器端口 </td>
+                <td><script>document.write(window.location.port)</script></td>
+            </tr>
+            
+            <tr>
+                <td>本文件所在文件夹 </td>
+                <td>
+                    <script>
+                        //页面解析到当前为止所有的script标签
+                        var js = document.scripts;
+                        //js[js.length - 1] 就是当前的js文件的路径
+                        js = js[js.length - 1].src.substring(0, js[js.length - 1].src.lastIndexOf("/") + 1);
+                        document.write(js)
+                    </script>
+
+                </td>
+            </tr>
+            
+            
+            <tr>
+                <td>服务器当前时间 </td>
+                <td>
+                    <script>
+                        function getNowDate(){
+                            var xhr = null;
+                            if(window.XMLHttpRequest){
+                            xhr = new window.XMLHttpRequest();
+                            }else{
+                            xhr = new ActiveObject("Microsoft")
+                            }
+
+                            xhr.open("GET","/",false)
+                            xhr.send(null);
+                            var date = xhr.getResponseHeader("Date");
+                            date = new Date(date);
+                            return date;
+                        }
+                        document.write(getNowDate())
+                        
+                    </script>
+                </td>
+            </tr>
+           
+            
+        </tbody>
+    </table>
+</body>
+</html>
