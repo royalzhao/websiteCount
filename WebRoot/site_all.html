@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>welcome!</title>
+    <link rel="stylesheet" href="lib/css/layui.css">
+    <link rel="stylesheet" href="./css/style.css">
+    
+    <!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
+    <!--[if lt IE 9]>
+      <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+      <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body>
+    <div class="container">
+        <blockquote class="layui-elem-quote">
+            欢迎使用SeeDream后台管理系统
+        </blockquote>
+        <table class="layui-table">
+            <thead>
+                <tr>
+                    <th>统计</th>
+                    <th>浏览次数</th>
+                    <th>IP数</th>
+                    
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>总数</td>
+                    <td>92</td>
+                    <td>9</td>
+                    
+                </tr>
+                <tr>
+                    <td>今日</td>
+                    <td>0</td>
+                    <td>0</td>
+                    
+                </tr>
+                <tr>
+                    <td>昨日</td>
+                    <td>0</td>
+                    <td>0</td>
+                    
+                </tr>
+                
+            </tbody>
+        </table>
+        <form class="layui-form" action="">
+            <div class="layui-form-pane" style="margin-top: 15px; float:left;">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">选择日期</label>
+                    <div class="layui-input-inline">
+                    <input class="layui-input" placeholder="" id="LAY_demorange_s">
+                    </div>
+                </div>
+            </div> 
+            
+            <button class="layui-btn" style="margin-top: 15px; float:left;"  lay-submit lay-filter="sreach"><i class="layui-icon">&#xe615;</i></button>   
+        </form>
+        <div id="main" style="width:100%;height:600px;">
+           
+        </div>
+        <fieldset class="layui-elem-field layui-field-title site-title">
+            <legend>信息统计</legend>
+        </fieldset>
+
+        
+        
+    </div>
+   
+    <script src="lib/layui.js"></script>
+    <script src="./js/echarts.min.js"></script>
+    <script src="js/base.js"></script>
+    <script>
+        layui.use(['laydate','layer'],function(){
+            $ = layui.jquery;
+            var laydate = layui.laydate;//日期插件
+            var layer = layui.layer//弹出层
+
+            //以上模块需要引用
+
+            var time = new Date();
+            localYear = time.getFullYear();
+            localMonth = time.getMonth()+1;
+            localDate = time.getDate();
+            local = localYear+'-'+localMonth+'-'+localDate;
+
+            $('#LAY_demorange_s').val(local);
+
+            laydate.render({ 
+                elem: '#LAY_demorange_s'
+            });
+
+            getData( $('#LAY_demorange_s').val());
+            
+            layui.use('form', function(){
+                var form = layui.form;
+                //监听提交
+                var data = $('#LAY_demorange_s').val();
+                form.on('submit(sreach)', function(data){
+                    getData(data);
+                });
+            });
+            
+        });
+        function getData(time){
+            $.ajax({
+                url:'http://localhost:8080/zdtjQuery.do',
+                data:{
+                    FDate:time
+                },
+                type:'get',
+                success:function(data){
+                    console.log(data)
+                    var myChart = echarts.init(document.getElementById('main')); 
+                    var option = {
+                        tooltip : {
+                            trigger: 'axis'
+                        },
+                        legend: {
+                            data:['邮件营销','联盟广告','视频广告','直接访问','搜索引擎']
+                        },
+                        toolbox: {
+                            show : true,
+                            feature : {
+                                mark : {show: true},
+                                dataView : {show: true, readOnly: false},
+                                magicType : {show: true, type: ['line', 'bar', 'stack', 'tiled']},
+                                restore : {show: true},
+                                saveAsImage : {show: true}
+                            }
+                        },
+                        calculable : true,
+                        xAxis : [
+                            {
+                                type : 'category',
+                                boundaryGap : false,
+                                data : ['周一','周二','周三','周四','周五','周六','周日']
+                            }
+                        ],
+                        yAxis : [
+                            {
+                                type : 'value'
+                            }
+                        ],
+                        series : [
+                            {
+                                name:'邮件营销',
+                                type:'line',
+                                stack: '总量',
+                                data:[120, 132, 101, 134, 90, 230, 210]
+                            },
+                            {
+                                name:'联盟广告',
+                                type:'line',
+                                stack: '总量',
+                                data:[220, 182, 191, 234, 290, 330, 310]
+                            },
+                            {
+                                name:'视频广告',
+                                type:'line',
+                                stack: '总量',
+                                data:[150, 232, 201, 154, 190, 330, 410]
+                            },
+                            {
+                                name:'直接访问',
+                                type:'line',
+                                stack: '总量',
+                                data:[320, 332, 301, 334, 390, 330, 320]
+                            },
+                            {
+                                name:'搜索引擎',
+                                type:'line',
+                                stack: '总量',
+                                data:[820, 932, 901, 934, 1290, 1330, 1320]
+                            }
+                        ]
+                    };
+                                        
+
+                    // 为echarts对象加载数据 
+                    myChart.setOption(option); 
+                },
+                error:function(){
+                    console.log('网络错误');
+                }
+            })
+        }
+        
+         
+    </script>
+    
+        
+       
+    
+</body>
+</html>

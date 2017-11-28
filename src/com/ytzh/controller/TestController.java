@@ -1,5 +1,7 @@
 package com.ytzh.controller;
 
+import java.io.PrintWriter;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -18,8 +20,11 @@ public class TestController {
 	private TestService testService;
 	
 	@RequestMapping(value="/sjtj")
-	public void test(HttpServletRequest request,HttpServletResponse response,FwmxPojo fwmx){
+	public void test(HttpServletRequest request,HttpServletResponse response,PrintWriter out,FwmxPojo fwmx){
 		System.out.println(fwmx);
 		testService.insert(fwmx);
+		out.write(1);
+	    out.flush();
+	    out.close();
 	}
 }
