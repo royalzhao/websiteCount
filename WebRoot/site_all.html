@@ -110,11 +110,11 @@
         });
         function getData(time){
             $.ajax({
-                url:'http://localhost:8080/zdtjQuery.do',
+                url:'http://localhost:8081/ytzh/zdtjQuery.do',
                 data:{
-                    FDate:time
+                	FDate:'2017-11-27'
                 },
-                type:'get',
+                type:'GET',
                 success:function(data){
                     console.log(data)
                     var myChart = echarts.init(document.getElementById('main')); 

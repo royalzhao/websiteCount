@@ -1,6 +1,6 @@
 package com.ytzh.pojo;
 
-import java.util.Date;
+
 
 public class FwmxPojo {
 	private String url;

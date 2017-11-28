@@ -1,0 +1,37 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+    <title>MyHtml.html</title>
+	
+    <meta http-equiv="keywords" content="keyword1,keyword2,keyword3">
+    <meta http-equiv="description" content="this is my page">
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    
+    <!--<link rel="stylesheet" type="text/css" href="./styles.css">-->
+    <script src="lib/layui.js"></script>
+    <script src="./js/echarts.min.js"></script>
+    <script src="js/base.js"></script>
+	<script type="text/javascript">
+	 function getData(){
+	 	alert(1);
+		$.ajax({
+                url:'http://localhost:8081/ytzh/zdtjQuery.do',
+                data:{
+                    FDate:'2017-11-27'
+                },
+                type:'GET',
+                success:function(data){
+                	alert(data);
+                },
+                error:function(){
+                    console.log('网络错误');
+                }
+            })
+     }
+	</script>
+  </head>
+  
+  <body>
+    <button onclick="getData();">a</button>
+  </body>
+</html>
