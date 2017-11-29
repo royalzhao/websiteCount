@@ -40,7 +40,7 @@
       } 
       var url = window.location.href;
       $.ajax({
-            url:'http://localhost:8080/ytzh/testController/sjtj',
+            url:'/websiteCount/fwmxAdd.do',
             data:{
                   url:url,
                   ip:returnCitySN["cip"],
@@ -48,8 +48,7 @@
                   NowFormatDate:getNowFormatDate(),
                   NowFormatTime:getNowFormattime(),
             },
-            type:'post',
-            dataType:'json',
+            type:'POST',
             success:function(data){
 				alert(data);
             },

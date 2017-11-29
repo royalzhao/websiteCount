@@ -2,11 +2,12 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ytzh.mapper.ZdtjMapper">
-	<select id="zdtjQuery" parameterType="tjDate" resultType="Map">
-	SELECT * ,HOUR(NowFormatTime) AS HOUR FROM ytzh_tj
-	WHERE 1=1 AND TO_DAYS(NowFormatDate) = TO_DAYS(#{FDate}) 
-   ORDER BY NowFormatTime 
-	</select>
+	<!-- 访问明细添加 -->
+	<insert id="FwmxSave" parameterType="Fwmx">
+		insert into tj.ytzh_tj (NowFormatDate,city,IP,url,NowFormatTime)
+		values(#{NowFormatDate},#{city} ,#{ip} , #{url},#{NowFormatTime})
+	</insert>
+	
 	<!-- 日各时段总访问量 -->
 	<select id="pageViewAllByHour" parameterType="tjDate" resultType="Map">
 		SELECT COUNT(1) pageViewCount, HOUR (NowFormatTime) HOUR FROM  ytzh_tj WHERE 
@@ -16,7 +17,18 @@
 	<!-- 日各时段独立访问量 -->
 	<select id="IpcAllByHourList" parameterType="tjDate" resultType="Map">
 		SELECT COUNT(1) IPcount,A.HOUR HOUR FROM  
-		(SELECT IP, HOUR (NowFormatTime) HOUR FROM  ytzh_tj WHERE 1=1 AND TO_DAYS(NowFormatDate) = TO_DAYS('2017-11-27') GROUP BY HOUR (NowFormatTime),IP
+		(SELECT IP, HOUR (NowFormatTime) HOUR FROM  ytzh_tj WHERE 1=1 AND TO_DAYS(NowFormatDate) = TO_DAYS(#{FDate}) GROUP BY HOUR (NowFormatTime),IP
 		 ) A  GROUP BY A.HOUR
+	</select>
+	
+	<!-- 前日总访问量 -->
+	<select id="pageViewByDay" parameterType="tjDate" resultType="Map">
+		SELECT COUNT(1) countByDay FROM  ytzh_tj 
+		WHERE 1=1 AND TO_DAYS(NowFormatDate) = TO_DAYS((SELECT DATE_SUB(#{FDate},INTERVAL 1 DAY))) 
+	</select>
+	
+	<!-- 日独立访问量 -->
+	<select id="IpcAllByDay" parameterType="tjDate" resultType="Map">
+		 SELECT COUNT(1)IpCountByDay FROM (SELECT GROUP_CONCAT(DISTINCT IP) FROM  ytzh_tj WHERE 1=1 AND TO_DAYS(NowFormatDate) = TO_DAYS((SELECT DATE_SUB(#{FDate},INTERVAL 1 DAY)))  GROUP BY IP)DISTINCT_IP 
 	</select>
 </mapper>
