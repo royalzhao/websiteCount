@@ -6,7 +6,9 @@ import java.util.Map;
 import com.ytzh.pojo.TjDate;
 
 public interface ZdtjService {
+	//网站日各时段总访问量
+	List<Map<String, Object>> pageViewAllByHour(TjDate tjDate);
 
-	List<Map<String, Object>> zdtjQuery(TjDate tjDate);
+	List<Map<String, Object>> IpcAllByHourList(TjDate tjDate);
 	
 }

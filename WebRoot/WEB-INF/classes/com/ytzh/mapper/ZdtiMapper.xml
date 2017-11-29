@@ -7,4 +7,16 @@
 	WHERE 1=1 AND TO_DAYS(NowFormatDate) = TO_DAYS(#{FDate}) 
    ORDER BY NowFormatTime 
 	</select>
+	<!-- 日各时段总访问量 -->
+	<select id="pageViewAllByHour" parameterType="tjDate" resultType="Map">
+		SELECT COUNT(1) pageViewCount, HOUR (NowFormatTime) HOUR FROM  ytzh_tj WHERE 
+   1=1 AND TO_DAYS(NowFormatDate) = TO_DAYS(#{FDate}) GROUP BY HOUR (NowFormatTime) 
+	</select>
+	
+	<!-- 日各时段独立访问量 -->
+	<select id="IpcAllByHourList" parameterType="tjDate" resultType="Map">
+		SELECT COUNT(1) IPcount,A.HOUR HOUR FROM  
+		(SELECT IP, HOUR (NowFormatTime) HOUR FROM  ytzh_tj WHERE 1=1 AND TO_DAYS(NowFormatDate) = TO_DAYS('2017-11-27') GROUP BY HOUR (NowFormatTime),IP
+		 ) A  GROUP BY A.HOUR
+	</select>
 </mapper>

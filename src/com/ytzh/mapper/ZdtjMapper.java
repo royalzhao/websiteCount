@@ -7,6 +7,8 @@ import com.ytzh.pojo.TjDate;
 
 public interface ZdtjMapper {
 
-	List<Map<String, Object>> zdtjQuery(TjDate tjDate);
+	List<Map<String, Object>> pageViewAllByHour(TjDate tjDate);
+
+	List<Map<String, Object>> IpcAllByHourList(TjDate tjDate);
 
 }

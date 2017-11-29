@@ -3,7 +3,7 @@
   type="WEB"
   name="websiteCount"
   id="myeclipse.1429448673611"
-  context-root="/ytzh"
+  context-root="/websiteCount"
   j2ee-spec="5.0"
   archive="websiteCount.war">
   <attributes>

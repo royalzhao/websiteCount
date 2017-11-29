@@ -16,9 +16,16 @@ import com.ytzh.service.ZdtjService;
 public class ZdtjServiceImpl implements ZdtjService{
 	@Resource
 	private ZdtjMapper zdtjMapper;
-	public List<Map<String, Object>> zdtjQuery(TjDate tjDate) {
-		
-		return zdtjMapper.zdtjQuery(tjDate);
+	//网站日各时段总访问量
+	@Override
+	public List<Map<String, Object>> pageViewAllByHour(TjDate tjDate) {
+		// TODO Auto-generated method stub
+		return zdtjMapper.pageViewAllByHour(tjDate);
+	}
+	@Override
+	public List<Map<String, Object>> IpcAllByHourList(TjDate tjDate) {
+		// TODO Auto-generated method stub
+		return zdtjMapper.IpcAllByHourList(tjDate);
 	}
 
 }
