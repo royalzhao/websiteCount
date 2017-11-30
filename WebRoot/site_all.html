@@ -19,6 +19,9 @@
         <blockquote class="layui-elem-quote">
             欢迎使用SeeDream后台管理系统
         </blockquote>
+        <fieldset class="layui-elem-field layui-field-title site-title">
+            <legend>信息统计</legend>
+        </fieldset>
         <table class="layui-table">
             <thead>
                 <tr>
@@ -30,15 +33,9 @@
             </thead>
             <tbody>
                 <tr>
-                    <td>总数</td>
-                    <td>92</td>
-                    <td>9</td>
-                    
-                </tr>
-                <tr>
                     <td>今日</td>
-                    <td>0</td>
-                    <td>0</td>
+                    <td id="today_viewCount">888</td>
+                    <td id="today_IPCount">888</td>
                     
                 </tr>
                 <tr>
@@ -47,6 +44,7 @@
                     <td>0</td>
                     
                 </tr>
+                
                 
             </tbody>
         </table>
@@ -62,12 +60,10 @@
             
             <button class="layui-btn" style="margin-top: 15px; float:left;"  lay-submit lay-filter="sreach"><i class="layui-icon">&#xe615;</i></button>   
         </form>
-        <div id="main" style="width:100%;height:600px;">
+        <div id="main" style="width:100%;height:675px;margin-top:93px;padding-top: 20px;">
            
         </div>
-        <fieldset class="layui-elem-field layui-field-title site-title">
-            <legend>信息统计</legend>
-        </fieldset>
+        
 
         
         
@@ -108,6 +104,7 @@
             });
             
         });
+        
         function getData(time){
             $.ajax({
                 url:'/websiteCount/zdtjQuery.do',
@@ -116,70 +113,178 @@
                 },
                 type:'GET',
                 success:function(data){
-                    console.log(data)
+                    //console.log(data);
+                    var data1 = JSON.parse(data);
+                    var arrlengthData = JSON.parse(data1[0]);
+                    var arrIPNumData = JSON.parse(data1[1]);
+                    
+                   
+                    
+                    var arrlength = [];
+                    var arrIPNum = [];
+                    var viewCount = 0;  //总浏览次数
+                    var IPCount = 0;    //总IP次数
+                    
+
+
+                    for(var i = 0;i<arrlengthData.length;i++){
+                        arrlength.push(arrlengthData[i].pageViewCount);
+                        viewCount += parseInt(arrlengthData[i].pageViewCount);
+                        
+                    }
+                    //console.log(arrlength)
+                    for(var j = 0;j<arrIPNumData.length;j++){
+                        arrIPNum.push(arrIPNumData[j].IPcount)
+                        IPCount += parseInt(arrIPNumData[j].IPcount);
+                    }
+                    //console.log(viewCount)
+                    $('#today_viewCount').text(viewCount)
+                    $('#today_IPCount').text(IPCount)
+
+
                     var myChart = echarts.init(document.getElementById('main')); 
-                    var option = {
-                        tooltip : {
-                            trigger: 'axis'
+                    
+
+
+                    option = {
+                        backgroundColor: '#394056',
+                        title: {
+                            text: '流量趋势',
+                            textStyle: {
+                                fontWeight: 'normal',
+                                fontSize: 16,
+                                color: '#F1F1F3'
+                            },
+                            left: '6%'
+                        },
+                        tooltip: {
+                            trigger: 'axis', //触发类型。[ default: 'item' ] :数据项图形触发，主要在散点图，饼图等无类目轴的图表中使用;'axis'坐标轴触发，主要在柱状图，折线图等会使用类目轴的图表中使用
+                            axisPointer: {
+                                lineStyle: {
+                                    color: '#57617B'
+                                }
+                            }
                         },
                         legend: {
-                            data:['邮件营销','联盟广告','视频广告','直接访问','搜索引擎']
-                        },
-                        toolbox: {
-                            show : true,
-                            feature : {
-                                mark : {show: true},
-                                dataView : {show: true, readOnly: false},
-                                magicType : {show: true, type: ['line', 'bar', 'stack', 'tiled']},
-                                restore : {show: true},
-                                saveAsImage : {show: true}
+                            icon: 'rect', //设置图例的图形形状，circle为圆，rect为矩形
+                            itemWidth: 14, //图例标记的图形宽度[ default: 25 ] 
+                            itemHeight: 5, //图例标记的图形高度。[ default: 14 ] 
+                            itemGap: 13, //图例每项之间的间隔。横向布局时为水平间隔，纵向布局时为纵向间隔。[ default: 10 ] 
+                            data: ['移动', '电信', '联通'],
+                            right: '4%', //图例组件离容器右侧的距离
+                            textStyle: {
+                                fontSize: 12,
+                                color: '#F1F1F3'
                             }
                         },
-                        calculable : true,
-                        xAxis : [
-                            {
-                                type : 'category',
-                                boundaryGap : false,
-                                data : ['周一','周二','周三','周四','周五','周六','周日']
+                        grid: {
+                            left: '3%', //grid 组件离容器左侧的距离。
+                            right: '4%', //grid 组件离容器右侧的距离。
+                            bottom: '3%', //grid 组件离容器下侧的距离。
+                            containLabel: true //grid 区域是否包含坐标轴的刻度标签[ default: false ] 
+                        },
+                        xAxis: [{
+                            type: 'category',
+                            boundaryGap: false, //坐标轴两边留白策略，类目轴和非类目轴的设置和表现不一样
+                            axisLine: {
+                                lineStyle: {
+                                    color: '#57617B' //坐标轴线线的颜色。
+                                }
+                            },
+                            data : ['00:00','01:00','02:00','03:00','04:00','05:00','06:00','07:00','08:00','09:00','10:00','11:00','12:00','13:00','14:00','15:00','16:00','17:00','18:00','19:00','20:00','21:00','22:00','23:00']
+                        }],
+                        yAxis: [{
+                            type: 'value', //坐标轴类型。'value' 数值轴，适用于连续数据;'category' 类目轴，适用于离散的类目数据，为该类型时必须通过 data 设置类目数据;'time' 时间轴;'log' 对数轴.
+                            name: '单位（个）', //坐标轴名称。
+                            axisTick: {
+                                show: false //是否显示坐标轴刻度
+                            },
+                            axisLine: {
+                                lineStyle: {
+                                    color: '#57617B' //坐标轴线线的颜色
+                                }
+                            },
+                            axisLabel: {
+                                margin: 10, //刻度标签与轴线之间的距离
+                                textStyle: {
+                                    fontSize: 14 //文字的字体大小
+                                }
+                            },
+                            splitLine: {
+                                lineStyle: {
+                                    color: '#57617B' //分隔线颜色设置
+                                }
                             }
-                        ],
-                        yAxis : [
-                            {
-                                type : 'value'
-                            }
-                        ],
-                        series : [
-                            {
-                                name:'邮件营销',
-                                type:'line',
-                                stack: '总量',
-                                data:[120, 132, 101, 134, 90, 230, 210]
+                        }],
+                        series: [{
+                            name: '浏览次数', //系列名称，用于tooltip的显示，legend 的图例筛选，在 setOption 更新数据和配置项时用于指定对应的系列
+                            type: 'line',
+                            smooth: true, //是否平滑曲线显示
+                            symbol: 'circle', //标记的图形。ECharts 提供的标记类型包括 'circle', 'rect', 'roundRect', 'triangle', 'diamond', 'pin', 'arrow'
+                            symbolSize: 5, //标记的大小，可以设置成诸如 10 这样单一的数字，也可以用数组分开表示宽和高，例如 [20, 10] 表示标记宽为20，高为10[ default: 4 ] 
+                            showSymbol: false, //是否显示 symbol, 如果 false 则只有在 tooltip hover 的时候显示
+                            lineStyle: { //线条样式
+                                normal: {
+                                    width: 1 //线宽。[ default: 2 ] 
+                                }
                             },
-                            {
-                                name:'联盟广告',
-                                type:'line',
-                                stack: '总量',
-                                data:[220, 182, 191, 234, 290, 330, 310]
+                            areaStyle: { //区域填充样式
+                                normal: {
+                                    color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{ //填充的颜色。
+                                        offset: 0, // 0% 处的颜色
+                                        color: 'rgba(137, 189, 27, 0.3)'
+                                    }, {
+                                        offset: 0.8, // 80% 处的颜色
+                                        color: 'rgba(137, 189, 27, 0)'
+                                    }], false),
+                                    shadowColor: 'rgba(0, 0, 0, 0.1)', //阴影颜色。支持的格式同color
+                                    shadowBlur: 10 //图形阴影的模糊大小。该属性配合 shadowColor,shadowOffsetX, shadowOffsetY 一起设置图形的阴影效果
+                                }
                             },
-                            {
-                                name:'视频广告',
-                                type:'line',
-                                stack: '总量',
-                                data:[150, 232, 201, 154, 190, 330, 410]
+                            itemStyle: { //折线拐点标志的样式
+                                normal: {
+                                    color: 'rgb(137,189,27)',
+                                    borderColor: 'rgba(137,189,2,0.27)', //图形的描边颜色。支持的格式同 color
+                                    borderWidth: 12 //描边线宽。为 0 时无描边。[ default: 0 ] 
+
+                                }
                             },
-                            {
-                                name:'直接访问',
-                                type:'line',
-                                stack: '总量',
-                                data:[320, 332, 301, 334, 390, 330, 320]
+                            data: arrlength
+                        }, {
+                            name: 'IP数量',
+                            type: 'line',
+                            smooth: true,
+                            symbol: 'circle',
+                            symbolSize: 5,
+                            showSymbol: false,
+                            lineStyle: {
+                                normal: {
+                                    width: 1
+                                }
                             },
-                            {
-                                name:'搜索引擎',
-                                type:'line',
-                                stack: '总量',
-                                data:[820, 932, 901, 934, 1290, 1330, 1320]
-                            }
-                        ]
+                            areaStyle: {
+                                normal: {
+                                    color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{
+                                        offset: 0,
+                                        color: 'rgba(0, 136, 212, 0.3)'
+                                    }, {
+                                        offset: 0.8,
+                                        color: 'rgba(0, 136, 212, 0)'
+                                    }], false),
+                                    shadowColor: 'rgba(0, 0, 0, 0.1)',
+                                    shadowBlur: 10
+                                }
+                            },
+                            itemStyle: {
+                                normal: {
+                                    color: 'rgb(0,136,212)',
+                                    borderColor: 'rgba(0,136,212,0.2)',
+                                    borderWidth: 12
+
+                                }
+                            },
+                            data: arrIPNum
+                        }]
                     };
                                         
 
@@ -190,7 +295,13 @@
                     console.log('网络错误');
                 }
             })
-        } 
+        }
+        
+         
     </script>
+    
+        
+       
+    
 </body>
 </html>

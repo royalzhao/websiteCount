@@ -160,6 +160,7 @@ body .layui-layout-admin .site-demo{
 .site_detail{
     margin-top: 1rem;
 }
+
 .site_detail li:nth-of-type(odd){
     background: #ccc;
 }

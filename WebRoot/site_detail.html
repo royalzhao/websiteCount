@@ -35,28 +35,21 @@
         </fieldset>
         <div class="site_detail">
             <ul>
-                <li>
-                    <span>浏览时间</span>
-                    <span>受访页面</span>
+                <li style="background: #009688; color: #fff;">
+                    <span>时段</span>
+                    <span>浏览次数</span>
                     <span>IP</span>
-                    <span>地区</span>
                 </li>
-                <li>
-                    <span>10:27:58</span>
-                    <span>http://www.ackao.cn/sm/wzpzsm2/?&ic=MJe5nR0uaMwy</span>
-                    <span>115.33.217.69</span>
-                    <span>北京市-北京市</span>
-                </li>
+                
                 <script id="data-template" type="text/x-handlebars-template">
                     
                     <!--遍历news  -->
                     {{#each datas}}
     
                     <li>
-                        <span>10:27:58</span>
-                        <span>http://www.ackao.cn/sm/wzpzsm2/?&ic=MJe5nR0uaMwy</span>
-                        <span>115.33.217.69</span>
-                        <span>北京市-北京市</span>
+                        <span>{{HOUR}}</span>
+                        <span>{{pageViewCount}}</span>
+                        <span>{{IPcount}}</span>
                     </li>
                     
                     {{/each}}
@@ -70,6 +63,7 @@
     </div>
     <script src="https://cdn.bootcss.com/jquery/1.12.4/jquery.min.js"></script>
     <script src="lib/layui.js"></script>
+    <script src="./js/handlebars-v4.0.10.js"></script>
     <script src="js/base.js"></script>
     <script>
         layui.use(['laydate','layer'],function(){
@@ -106,14 +100,23 @@
 
         function getData(time){
             $.ajax({
-                url:'',
+                url:'/websiteCount/zdtjQuery.do',
                 data:{
-                    date:time
+                    FDate:'2017-11-27'
                 },
-                type:'post',
-                dataType:'json',
+                type:'GET',
                 success:function(data){
-                    console.log(data)
+                    
+                    var data1 = JSON.parse(data);
+                    var arrlengthData = JSON.parse(data1[0]);
+                    var arrIPNumData = JSON.parse(data1[1]);
+
+                    
+                    for(var i = 0;i<arrlengthData.length;i++){
+                        arrlengthData[i]["IPcount"] = arrIPNumData[i].IPcount
+                    }
+                    console.log(arrlengthData)
+                   
                     //获取模板数据
 						
                     var NewsHotTemplateScript =  $('#data-template').html();
@@ -122,7 +125,7 @@
                     var NewsHotTemplate = Handlebars.compile(NewsHotTemplateScript);
                     //定义数据
                     var context = {
-                        datas:data,
+                        datas:arrlengthData,
                     };
                     
                     //把数据传送到模板
